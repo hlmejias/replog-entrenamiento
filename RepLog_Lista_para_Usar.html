@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#10131a">
+<meta name="description" content="Registro personal de entrenamiento sin conexión">
+
+<title>RepLog — Entrenamiento (archivo local)</title>
+<style>
+:root{color-scheme:dark;--bg:#0c0f14;--panel:#151a23;--panel2:#1c2330;--line:#2a3342;--text:#f2f5fa;--muted:#9ba8bb;--accent:#b6f36b;--danger:#ff7272;--blue:#8db8ff}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;padding-bottom:88px}button,input,select,textarea{font:inherit}button{cursor:pointer;border:0;border-radius:12px;padding:11px 14px;background:var(--accent);color:#11170a;font-weight:750}button.secondary{background:var(--panel2);color:var(--text);border:1px solid var(--line)}button.danger{background:#3b2027;color:#ffb4b4;border:1px solid #65303b}button.small{padding:7px 10px;font-size:13px;border-radius:9px}.wrap{max-width:780px;margin:auto;padding:16px}.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0 18px}.brand{font-size:22px;font-weight:900;letter-spacing:-.7px}.brand span{color:var(--accent)}.sub{color:var(--muted);font-size:12px}.screen{display:none}.screen.active{display:block}.heading{font-size:25px;letter-spacing:-.6px;margin:5px 0 4px}.muted{color:var(--muted)}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.stat,.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:15px;margin:12px 0}.stat strong{display:block;font-size:25px;letter-spacing:-.5px}.stat span{color:var(--muted);font-size:12px}.row{display:flex;align-items:center;justify-content:space-between;gap:10px}.row.wraprow{flex-wrap:wrap}.stack{display:flex;flex-direction:column;gap:10px}.field{display:flex;flex-direction:column;gap:5px;flex:1;min-width:0}.field label{font-size:12px;color:var(--muted)}input,select,textarea{width:100%;background:#0e1219;border:1px solid var(--line);color:var(--text);padding:11px;border-radius:11px;min-width:0}input:focus,select:focus,textarea:focus{outline:2px solid #b6f36b66;border-color:var(--accent)}.actions{display:flex;gap:8px;flex-wrap:wrap}.tabs{position:fixed;bottom:0;left:0;right:0;z-index:5;background:#10141cee;backdrop-filter:blur(14px);border-top:1px solid var(--line);display:flex;justify-content:center;padding:8px max(8px,env(safe-area-inset-right)) calc(8px + env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-left))}.tabs button{flex:1;max-width:150px;background:transparent;color:var(--muted);padding:8px 4px;font-size:11px}.tabs button.active{background:var(--panel2);color:var(--accent)}.tabs .ico{display:block;font-size:19px;margin-bottom:2px}.exercise{border:1px solid var(--line);border-radius:15px;margin:12px 0;overflow:hidden;background:#11161e}.exercise-head{padding:12px 13px;background:var(--panel);display:flex;align-items:center;justify-content:space-between;gap:8px}.exercise-body{padding:10px}.setrow{display:grid;grid-template-columns:28px 1fr 1fr 36px;gap:7px;align-items:center;margin:7px 0}.setrow input{padding:9px 7px;text-align:center}.setrow .done{width:30px;height:34px;padding:0;background:var(--panel2);color:var(--muted)}.setrow .done.checked{background:var(--accent);color:#10150b}.tiny{font-size:11px;color:var(--muted)}.empty{padding:24px 12px;text-align:center;color:var(--muted)}.listitem{padding:12px 0;border-bottom:1px solid var(--line)}.listitem:last-child{border-bottom:0}.pill{font-size:11px;color:var(--accent);background:#26341d;padding:4px 8px;border-radius:99px}.timer{font-size:54px;font-weight:850;letter-spacing:-2px;text-align:center;margin:18px 0}.timerbox{text-align:center;padding:20px}.bar{height:8px;background:#252c38;border-radius:9px;overflow:hidden;margin-top:8px}.bar>i{display:block;height:100%;background:var(--accent);width:0}.notice{background:#202a1c;border:1px solid #3a512c;border-radius:12px;padding:12px;color:#d7f8b4;font-size:13px}.dangertext{color:var(--danger)}.chart{width:100%;height:180px;display:block}.exercise-title{font-weight:750}.right{text-align:right}
+@media(min-width:600px){.wrap{padding:22px}.heading{font-size:30px}.grid{grid-template-columns:repeat(4,minmax(0,1fr))}.stat strong{font-size:28px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top"><div><div class="brand">REP<span>LOG</span></div><div class="sub">TU ENTRENAMIENTO, BAJO CONTROL</div></div><button class="secondary small" id="backupTop">↧ Copia</button></header>
+
+<section id="home" class="screen active">
+  <div class="row"><div><div class="sub" id="todayLabel"></div><h1 class="heading">Resumen</h1><div class="muted">Pequeños avances, constancia real.</div></div><button id="startWorkout">＋ Entrenar</button></div>
+  <div class="grid">
+    <div class="stat"><span>Sesiones registradas</span><strong id="statSessions">0</strong></div>
+    <div class="stat"><span>Series completadas</span><strong id="statSets">0</strong></div>
+    <div class="stat"><span>Volumen total</span><strong id="statVolume">0 kg</strong></div>
+    <div class="stat"><span>Récords personales</span><strong id="statPR">0</strong></div>
+  </div>
+  <div class="card"><div class="row"><h3 style="margin:0">Últimos entrenamientos</h3><button class="secondary small" data-go="history">Ver historial</button></div><div id="recentList"></div></div>
+  <div class="card"><h3 style="margin-top:0">Progreso de volumen</h3><canvas id="volumeChart" class="chart" aria-label="Gráfico de volumen"></canvas><div class="tiny">Volumen estimado: peso × repeticiones. Los ejercicios sin peso externo no suman volumen.</div></div>
+</section>
+
+<section id="workout" class="screen">
+  <div class="row"><div><div class="sub">SESIÓN ACTUAL</div><h1 class="heading">Entrenamiento</h1></div><button class="secondary small" id="cancelWorkout">Descartar</button></div>
+  <div class="card stack">
+    <div class="field"><label for="sessionName">Nombre de la sesión</label><input id="sessionName" placeholder="Ej. Torso, calistenia..." maxlength="70"></div>
+    <div class="field"><label for="sessionDate">Fecha</label><input id="sessionDate" type="date"></div>
+    <div class="field"><label for="sessionNotes">Notas (opcional)</label><textarea id="sessionNotes" rows="2" placeholder="Energía, sensaciones, molestias..."></textarea></div>
+    <div class="row"><strong>Ejercicios</strong><span class="tiny" id="exerciseCount">0 ejercicios</span></div>
+    <div id="exerciseList"></div>
+    <div class="row wraprow"><button class="secondary" id="addExercise">＋ Añadir ejercicio</button><button class="secondary" id="pickRoutine">Usar rutina</button></div>
+    <button id="saveWorkout" style="width:100%">Guardar entrenamiento</button>
+  </div>
+</section>
+
+<section id="history" class="screen">
+  <div class="row"><div><div class="sub">TUS REGISTROS</div><h1 class="heading">Historial</h1></div><button class="secondary small" id="exportCsv">CSV ↗</button></div>
+  <div class="card"><div class="field"><label for="historySearch">Buscar por nombre o ejercicio</label><input id="historySearch" placeholder="Buscar..."></div><div id="historyList"></div></div>
+</section>
+
+<section id="routines" class="screen">
+  <div class="sub">PLANTILLAS REUTILIZABLES</div><h1 class="heading">Rutinas</h1>
+  <div class="card stack">
+    <div class="field"><label for="routineName">Nombre de la rutina</label><input id="routineName" placeholder="Ej. Full body A"></div>
+    <div class="field"><label for="routineExercises">Ejercicios (uno por línea)</label><textarea id="routineExercises" rows="5" placeholder="Dominadas&#10;Fondos&#10;Sentadillas"></textarea></div>
+    <button id="saveRoutine">Guardar rutina</button>
+  </div>
+  <div id="routineList"></div>
+</section>
+
+<section id="stats" class="screen">
+  <div class="sub">TENDENCIAS Y MARCAS</div><h1 class="heading">Estadísticas</h1>
+  <div class="grid">
+    <div class="stat"><span>Tiempo total registrado</span><strong id="statDuration">0 min</strong></div>
+    <div class="stat"><span>Promedio por sesión</span><strong id="statAverage">0</strong></div>
+  </div>
+  <div class="card"><h3 style="margin-top:0">Récords personales</h3><div class="tiny">Mayor peso registrado por ejercicio (solo ejercicios con carga).</div><div id="prList"></div></div>
+  <div class="card"><h3 style="margin-top:0">Datos y copias de seguridad</h3><p class="muted">Los registros permanecen en este navegador y dispositivo. Exporta una copia periódicamente.</p><div class="actions"><button id="exportJson">Exportar copia JSON</button><button class="secondary" id="importBtn">Importar copia</button><input id="importFile" type="file" accept=".json,application/json" hidden></div><p class="tiny">CSV: tabla compatible con Excel. JSON: copia completa, incluidas rutinas e historial.</p></div>
+</section>
+
+<section id="timer" class="screen">
+  <div class="sub">RECUPERACIÓN ENTRE SERIES</div><h1 class="heading">Temporizador</h1>
+  <div class="card timerbox">
+    <div class="tiny">TIEMPO RESTANTE</div><div class="timer" id="timerDisplay">01:30</div>
+    <div class="row" style="justify-content:center;gap:8px;margin-bottom:15px"><button class="secondary small" data-time="60">60 s</button><button class="secondary small" data-time="90">90 s</button><button class="secondary small" data-time="120">120 s</button><button class="secondary small" data-time="180">180 s</button></div>
+    <div class="actions" style="justify-content:center"><button id="timerStart">Iniciar</button><button class="secondary" id="timerPause">Pausar</button><button class="secondary" id="timerReset">Reiniciar</button></div>
+    <p class="muted">Mantén la sesión enfocada: descanso suficiente, técnica controlada y progresión sostenible.</p>
+  </div>
+</section>
+</div>
+
+<nav class="tabs">
+<button class="active" data-go="home"><span class="ico">⌂</span>Inicio</button>
+<button data-go="workout"><span class="ico">＋</span>Entrenar</button>
+<button data-go="history"><span class="ico">▤</span>Historial</button>
+<button data-go="routines"><span class="ico">▦</span>Rutinas</button>
+<button data-go="stats"><span class="ico">↗</span>Progreso</button>
+</nav>
+<div id="toast" style="position:fixed;left:16px;right:16px;bottom:90px;background:#26341d;border:1px solid #486333;color:#e7ffd2;padding:12px 14px;border-radius:12px;display:none;z-index:10"></div>
+
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const DBKEY='replog-v1';
+let db={sessions:[],routines:[]}, draft=[], timerSeconds=90,timerLeft=90,timerHandle=null,timerEnd=null;
+function load(){try{const d=JSON.parse(localStorage.getItem(DBKEY)||'{}');db={sessions:Array.isArray(d.sessions)?d.sessions:[],routines:Array.isArray(d.routines)?d.routines:[]}}catch{db={sessions:[],routines:[]}}}
+function persist(){localStorage.setItem(DBKEY,JSON.stringify(db));renderAll()}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
+function today(){let d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
+function fmtDate(d){if(!d)return '';let [y,m,day]=d.split('-');return `${day}/${m}/${y}`}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function toast(s){let t=$('#toast');t.textContent=s;t.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>t.style.display='none',2600)}
+function go(id){$$('.screen').forEach(x=>x.classList.toggle('active',x.id===id));$$('.tabs button').forEach(x=>x.classList.toggle('active',x.dataset.go===id));if(id==='workout')renderDraft();if(id==='history')renderHistory();if(id==='routines')renderRoutines();if(id==='stats')renderStats();if(id==='home')renderHome();window.scrollTo(0,0)}
+$$('[data-go]').forEach(b=>b.addEventListener('click',()=>go(b.dataset.go)));
+$('#todayLabel').textContent=new Date().toLocaleDateString('es-ES',{weekday:'long',day:'numeric',month:'long'});
+function newDraft(){draft=[];$('#sessionName').value='';$('#sessionDate').value=today();$('#sessionNotes').value='';renderDraft()}
+function addExercise(name=''){draft.push({id:uid(),name,sets:[{reps:'',weight:'',done:false}]});renderDraft()}
+function renderDraft(){
+ $('#exerciseCount').textContent=`${draft.length} ejercicio${draft.length===1?'':'s'}`;
+ $('#exerciseList').innerHTML=draft.map((e,ei)=>`<div class="exercise" data-eid="${e.id}"><div class="exercise-head"><div class="field"><label>Ejercicio ${ei+1}</label><input data-name="${e.id}" value="${esc(e.name)}" placeholder="Ej. Dominadas, press banca..." maxlength="80"></div><button class="danger small" data-remove="${e.id}">×</button></div><div class="exercise-body"><div class="setrow tiny"><span>Serie</span><span>Reps</span><span>Peso (kg)</span><span>✓</span></div>${e.sets.map((s,si)=>`<div class="setrow"><span class="tiny">${si+1}</span><input type="number" min="0" step="1" inputmode="numeric" placeholder="0" value="${esc(s.reps)}" data-reps="${e.id}:${si}"><input type="number" min="0" step="0.25" inputmode="decimal" placeholder="—" value="${esc(s.weight)}" data-weight="${e.id}:${si}"><button class="done ${s.done?'checked':''}" data-done="${e.id}:${si}" aria-label="Marcar serie">${s.done?'✓':'○'}</button></div>`).join('')}<button class="secondary small" data-addset="${e.id}">＋ Añadir serie</button></div></div>`).join('')||'<div class="empty">Añade el primer ejercicio de tu sesión.</div>';
+ $('#exerciseList').querySelectorAll('[data-name]').forEach(el=>el.addEventListener('input',()=>{let e=draft.find(x=>x.id===el.dataset.name);if(e)e.name=el.value}));
+ $('#exerciseList').querySelectorAll('[data-reps]').forEach(el=>el.addEventListener('input',()=>{let [id,si]=el.dataset.reps.split(':');draft.find(x=>x.id===id).sets[+si].reps=el.value}));
+ $('#exerciseList').querySelectorAll('[data-weight]').forEach(el=>el.addEventListener('input',()=>{let [id,si]=el.dataset.weight.split(':');draft.find(x=>x.id===id).sets[+si].weight=el.value}));
+ $('#exerciseList').querySelectorAll('[data-done]').forEach(el=>el.addEventListener('click',()=>{let [id,si]=el.dataset.done.split(':');let s=draft.find(x=>x.id===id).sets[+si];s.done=!s.done;renderDraft()}));
+ $('#exerciseList').querySelectorAll('[data-addset]').forEach(el=>el.addEventListener('click',()=>{draft.find(x=>x.id===el.dataset.addset).sets.push({reps:'',weight:'',done:false});renderDraft()}));
+ $('#exerciseList').querySelectorAll('[data-remove]').forEach(el=>el.addEventListener('click',()=>{draft=draft.filter(x=>x.id!==el.dataset.remove);renderDraft()}));
+}
+$('#startWorkout').onclick=()=>{newDraft();go('workout')};$('#addExercise').onclick=()=>addExercise();
+$('#cancelWorkout').onclick=()=>{if(confirm('¿Descartar la sesión actual?')){newDraft();go('home')}};
+$('#saveWorkout').onclick=()=>{
+ const name=$('#sessionName').value.trim()||'Entrenamiento';
+ const exercises=draft.map(e=>({name:e.name.trim(),sets:e.sets.map(s=>({reps:Number(s.reps)||0,weight:Number(s.weight)||0,done:!!s.done})).filter(s=>s.reps||s.weight||s.done)})).filter(e=>e.name&&e.sets.length);
+ if(!exercises.length){toast('Añade al menos un ejercicio con alguna serie.');return}
+ db.sessions.unshift({id:uid(),name,date:$('#sessionDate').value||today(),notes:$('#sessionNotes').value.trim(),duration:0,exercises});
+ persist();newDraft();go('home');toast('Entrenamiento guardado.')
+};
+$('#pickRoutine').onclick=()=>{if(!db.routines.length){toast('Primero guarda una rutina en la pestaña Rutinas.');return}const names=db.routines.map((r,i)=>`${i+1}. ${r.name}`).join('\n');const choice=prompt('Escribe el número de la rutina:\n'+names,'1');const r=db.routines[Number(choice)-1];if(r){draft=r.exercises.map(name=>({id:uid(),name,sets:[{reps:'',weight:'',done:false},{reps:'',weight:'',done:false},{reps:'',weight:'',done:false}]}));renderDraft()}};
+function sessionStats(s){let sets=0,volume=0;for(const e of s.exercises)for(const x of e.sets){if(x.done){sets++;volume+=(x.weight||0)*(x.reps||0)}}return {sets,volume}}
+function allPR(){const map={};db.sessions.forEach(s=>s.exercises.forEach(e=>e.sets.forEach(x=>{if(x.weight>0&&x.done&&(!map[e.name]||x.weight>map[e.name].weight))map[e.name]={weight:x.weight,reps:x.reps,date:s.date}})));return map}
+function renderHome(){
+ const totals=db.sessions.reduce((a,s)=>{let z=sessionStats(s);a.sets+=z.sets;a.volume+=z.volume;return a},{sets:0,volume:0});
+ $('#statSessions').textContent=db.sessions.length;$('#statSets').textContent=totals.sets;$('#statVolume').textContent=Math.round(totals.volume).toLocaleString('es-ES')+' kg';$('#statPR').textContent=Object.keys(allPR()).length;
+ $('#recentList').innerHTML=db.sessions.slice(0,4).map(s=>`<div class="listitem"><div class="row"><strong>${esc(s.name)}</strong><span class="tiny">${fmtDate(s.date)}</span></div><div class="tiny">${s.exercises.length} ejercicios · ${sessionStats(s).sets} series completadas · ${Math.round(sessionStats(s).volume)} kg de volumen</div></div>`).join('')||'<div class="empty">Todavía no hay sesiones. Registra tu primer entrenamiento.</div>';
+ drawChart();
+}
+function renderHistory(){
+ const q=($('#historySearch').value||'').toLowerCase();
+ const list=db.sessions.filter(s=>(s.name+' '+s.exercises.map(e=>e.name).join(' ')).toLowerCase().includes(q));
+ $('#historyList').innerHTML=list.map(s=>`<div class="listitem"><div class="row"><div><strong>${esc(s.name)}</strong><div class="tiny">${fmtDate(s.date)} · ${s.exercises.length} ejercicios · ${sessionStats(s).sets} series</div></div><button class="danger small" data-del="${s.id}">Eliminar</button></div>${s.notes?`<p class="muted">${esc(s.notes)}</p>`:''}<details><summary class="tiny">Ver ejercicios</summary>${s.exercises.map(e=>`<div style="padding:8px 0"><strong>${esc(e.name)}</strong><div class="tiny">${e.sets.map((x,i)=>`S${i+1}: ${x.reps} reps${x.weight?` × ${x.weight} kg`:''}${x.done?' ✓':''}`).join(' · ')}</div></div>`).join('')}</details></div>`).join('')||'<div class="empty">No se encontraron entrenamientos.</div>';
+ $('#historyList').querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{if(confirm('¿Eliminar esta sesión?')){db.sessions=db.sessions.filter(s=>s.id!==b.dataset.del);persist();renderHistory()}});
+}
+$('#historySearch').addEventListener('input',renderHistory);
+$('#saveRoutine').onclick=()=>{const name=$('#routineName').value.trim();const exercises=$('#routineExercises').value.split('\n').map(x=>x.trim()).filter(Boolean);if(!name||!exercises.length){toast('Indica un nombre y al menos un ejercicio.');return}db.routines.push({id:uid(),name,exercises});persist();$('#routineName').value='';$('#routineExercises').value='';toast('Rutina guardada.')};
+function renderRoutines(){$('#routineList').innerHTML=db.routines.map(r=>`<div class="card"><div class="row"><strong>${esc(r.name)}</strong><button class="danger small" data-rdel="${r.id}">Eliminar</button></div><p class="muted">${r.exercises.map(esc).join(' · ')}</p><button class="secondary small" data-rstart="${r.id}">Usar en entrenamiento</button></div>`).join('')||'<div class="empty">Crea una rutina para repetir tus sesiones.</div>';$$('[data-rdel]').forEach(b=>b.onclick=()=>{db.routines=db.routines.filter(r=>r.id!==b.dataset.rdel);persist()});$$('[data-rstart]').forEach(b=>b.onclick=()=>{const r=db.routines.find(x=>x.id===b.dataset.rstart);newDraft();draft=r.exercises.map(name=>({id:uid(),name,sets:[{reps:'',weight:'',done:false},{reps:'',weight:'',done:false},{reps:'',weight:'',done:false}]}));go('workout')})}
+function renderStats(){
+ const total=db.sessions.reduce((a,s)=>a+Number(s.duration||0),0);$('#statDuration').textContent=total+' min';$('#statAverage').textContent=db.sessions.length?Math.round(total/db.sessions.length)+' min':'0 min';
+ const prs=Object.entries(allPR()).sort((a,b)=>b[1].weight-a[1].weight);
+ $('#prList').innerHTML=prs.map(([n,p])=>`<div class="listitem row"><div><strong>${esc(n)}</strong><div class="tiny">${fmtDate(p.date)} · ${p.reps} repeticiones</div></div><strong>${p.weight} kg</strong></div>`).join('')||'<div class="empty">Los récords aparecerán al completar series con peso.</div>';
+}
+function drawChart(){
+ const c=$('#volumeChart');if(!c)return;const ctx=c.getContext('2d'),w=c.clientWidth||320,h=180,dpr=window.devicePixelRatio||1;c.width=w*dpr;c.height=h*dpr;ctx.scale(dpr,dpr);ctx.clearRect(0,0,w,h);
+ const data=[...db.sessions].slice(0,7).reverse().map(s=>({label:s.date.slice(5),v:sessionStats(s).volume}));if(!data.length){ctx.fillStyle='#9ba8bb';ctx.font='13px system-ui';ctx.fillText('Registra sesiones para ver tu progreso',8,85);return}
+ const max=Math.max(1,...data.map(x=>x.v)),left=8,right=8,top=15,bottom=28,gw=w-left-right,gh=h-top-bottom;
+ ctx.strokeStyle='#2a3342';ctx.lineWidth=1;for(let i=0;i<4;i++){let y=top+gh*i/3;ctx.beginPath();ctx.moveTo(left,y);ctx.lineTo(w-right,y);ctx.stroke()}
+ const bw=Math.min(28,gw/(data.length*1.7));data.forEach((d,i)=>{const x=left+(i+.5)*gw/data.length-bw/2,bar=gh*d.v/max;ctx.fillStyle='#b6f36b';ctx.beginPath();ctx.roundRect(x,top+gh-bar,bw,bar,4);ctx.fill();ctx.fillStyle='#9ba8bb';ctx.font='10px system-ui';ctx.textAlign='center';ctx.fillText(d.label,x+bw/2,h-8)});
+}
+function csvCell(v){return '"'+String(v??'').replace(/"/g,'""')+'"'}
+function exportCSV(){
+ const rows=[['Fecha','Sesión','Notas','Ejercicio','Serie','Repeticiones','Peso_kg','Completada','Volumen_kg']];
+ db.sessions.forEach(s=>s.exercises.forEach(e=>e.sets.forEach((x,i)=>rows.push([s.date,s.name,s.notes,e.name,i+1,x.reps,x.weight,x.done?'Sí':'No',(x.weight||0)*(x.reps||0)]))));
+ const csv='\ufeff'+rows.map(r=>r.map(csvCell).join(';')).join('\r\n');download(new Blob([csv],{type:'text/csv;charset=utf-8'}),`replog-${today()}.csv`);toast('CSV exportado.')
+}
+function download(blob,name){const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)}
+function exportJSON(){download(new Blob([JSON.stringify({app:'RepLog',version:1,exportedAt:new Date().toISOString(),...db},null,2)],{type:'application/json'}),`replog-copia-${today()}.json`);toast('Copia de seguridad exportada.')}
+$('#exportCsv').onclick=exportCSV;$('#exportJson').onclick=exportJSON;$('#backupTop').onclick=exportJSON;
+$('#importBtn').onclick=()=>$('#importFile').click();
+$('#importFile').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const x=JSON.parse(await f.text());if(!Array.isArray(x.sessions)||!Array.isArray(x.routines))throw Error('Formato no válido');if(confirm('Importar reemplazará los datos actuales. Exporta una copia antes. ¿Continuar?')){db={sessions:x.sessions,routines:x.routines};persist();toast('Copia importada.')}}catch(err){alert('No se pudo importar la copia: '+err.message)}e.target.value=''};
+function setTimer(n){timerSeconds=n;timerLeft=n;updateTimer();if(timerHandle){clearInterval(timerHandle);timerHandle=null}$('#timerStart').textContent='Iniciar'}
+function updateTimer(){$('#timerDisplay').textContent=`${String(Math.floor(timerLeft/60)).padStart(2,'0')}:${String(timerLeft%60).padStart(2,'0')}`}
+$$('[data-time]').forEach(b=>b.onclick=()=>setTimer(Number(b.dataset.time)));
+$('#timerStart').onclick=()=>{if(timerHandle)return;if(timerLeft<=0)timerLeft=timerSeconds;timerEnd=Date.now()+timerLeft*1000;$('#timerStart').textContent='En marcha';timerHandle=setInterval(()=>{timerLeft=Math.max(0,Math.ceil((timerEnd-Date.now())/1000));updateTimer();if(timerLeft<=0){clearInterval(timerHandle);timerHandle=null;$('#timerStart').textContent='Iniciar';if(navigator.vibrate)navigator.vibrate([300,120,300]);toast('Descanso terminado. ¡A por la siguiente serie!')}},250)};
+$('#timerPause').onclick=()=>{if(timerHandle){clearInterval(timerHandle);timerHandle=null;$('#timerStart').textContent='Continuar';timerLeft=Math.max(0,Math.ceil((timerEnd-Date.now())/1000));updateTimer()}};
+$('#timerReset').onclick=()=>setTimer(timerSeconds);
+function renderAll(){renderHome();if($('#history').classList.contains('active'))renderHistory();if($('#routines').classList.contains('active'))renderRoutines();if($('#stats').classList.contains('active'))renderStats()}
+load();newDraft();renderAll();updateTimer();
+// Edición autónoma: no necesita service worker ni archivos adicionales.
+</script>
+</body>
+</html>
